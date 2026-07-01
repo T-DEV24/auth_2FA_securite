@@ -7,7 +7,7 @@ from flask import Blueprint, request, jsonify
 from db.connection import get_collection
 from auth.security import (
     verify_password, verify_totp,
-    create_jwt, get_current_totp
+    create_jwt, get_current_totp, TOTP_INTERVAL_SECONDS
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -35,10 +35,15 @@ def login():
 
     # Si MFA activée, le client doit passer par /verify-otp
     if user.get("mfa_enabled"):
+        code = get_current_totp(user["totp_secret"])
+        print(
+            f"[MFA] Code OTP pour {user_id} : {code} "
+            f"(expire dans {TOTP_INTERVAL_SECONDS // 60} minutes)"
+        )
         return jsonify({
             "status":   "mfa_required",
             "user_id":  user_id,
-            "message":  "Entrez votre code TOTP pour obtenir un jeton d'accès."
+            "message":  "Code OTP envoyé dans le terminal du serveur."
         }), 200
 
     # Pas de MFA : JWT émis directement (mfa_ok = False)
@@ -70,12 +75,13 @@ def verify_otp():
 
 @auth_bp.route("/totp-debug/<user_id>", methods=["GET"])
 def totp_debug(user_id):
-    """
-    Route utilitaire pour les tests : renvoie le code TOTP courant.
-    À désactiver en production.
-    """
+    """Route utilitaire : affiche le code TOTP courant dans le terminal."""
     user = _get_user(user_id)
     if not user:
         return jsonify({"error": "Utilisateur inconnu"}), 404
     code = get_current_totp(user["totp_secret"])
-    return jsonify({"user_id": user_id, "current_otp": code}), 200
+    print(
+        f"[MFA DEBUG] Code OTP pour {user_id} : {code} "
+        f"(expire dans {TOTP_INTERVAL_SECONDS // 60} minutes)"
+    )
+    return jsonify({"user_id": user_id, "message": "Code OTP affiché dans le terminal."}), 200

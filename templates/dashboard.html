@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+  <h1>Dashboard</h1>
+  <p class="text-muted">Bienvenue {{ current_user.name }}. Rôle : {{ current_user.role }}. Département : {{ current_user.department }}.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="simple-card stat-card">
+      <span>Accès consultés</span>
+      <strong data-counter="{{ stats.total }}">{{ stats.total }}</strong>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="simple-card stat-card">
+      <span>Accès refusés</span>
+      <strong>{{ stats.denied }}</strong>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="simple-card stat-card">
+      <span>Taux de refus</span>
+      <strong>{{ '%.1f'|format((stats.denied / stats.total * 100) if stats.total else 0) }}%</strong>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="simple-card">
+      <h2>Accès par type</h2>
+      <canvas id="typeChart" data-labels='{{ stats.by_type.keys()|list|tojson }}' data-values='{{ stats.by_type.values()|list|tojson }}'></canvas>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="simple-card">
+      <h2>Dernières actions</h2>
+      <div class="list-group list-group-flush">
+        {% for log in stats.recent %}
+          <div class="list-group-item px-0">
+            <div class="d-flex justify-content-between">
+              <span>{{ log.action }} sur {{ log.resource_id }}</span>
+              <span class="badge {{ 'text-bg-success' if log.success|string|lower == 'true' else 'text-bg-secondary' }}">
+                {{ 'Autorisé' if log.success|string|lower == 'true' else 'Refusé' }}
+              </span>
+            </div>
+            <small class="text-muted">{{ log.timestamp }}</small>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">Aucune activité récente.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

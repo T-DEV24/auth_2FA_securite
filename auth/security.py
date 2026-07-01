@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, timezone
 JWT_SECRET  = os.getenv("JWT_SECRET", "change_me_in_production")
 JWT_ALGO    = "HS256"
 JWT_EXPIRY  = int(os.getenv("JWT_EXPIRY_MINUTES", 60))
+TOTP_INTERVAL_SECONDS = int(os.getenv("TOTP_INTERVAL_SECONDS", 180))
 
 # ─── Hachage de mot de passe ──────────────────────────────────────────────────
 
@@ -32,20 +33,20 @@ def generate_totp_secret() -> str:
 
 def get_totp_uri(secret: str, username: str, issuer: str = "Hopital") -> str:
     """Retourne l'URI otpauth:// pour générer un QR code."""
-    totp = pyotp.TOTP(secret)
+    totp = pyotp.TOTP(secret, interval=TOTP_INTERVAL_SECONDS)
     return totp.provisioning_uri(name=username, issuer_name=issuer)
 
 def verify_totp(secret: str, code: str) -> bool:
     """
     Vérifie le code TOTP fourni par l'utilisateur.
-    valid_window=1 tolère un décalage d'une fenêtre de 30 s.
+    Le code expire après 3 minutes par défaut.
     """
-    totp = pyotp.TOTP(secret)
-    return totp.verify(code, valid_window=1)
+    totp = pyotp.TOTP(secret, interval=TOTP_INTERVAL_SECONDS)
+    return totp.verify(code, valid_window=0)
 
 def get_current_totp(secret: str) -> str:
     """Renvoie le code TOTP courant (utile pour les tests)."""
-    return pyotp.TOTP(secret).now()
+    return pyotp.TOTP(secret, interval=TOTP_INTERVAL_SECONDS).now()
 
 # ─── JWT ──────────────────────────────────────────────────────────────────────
 
