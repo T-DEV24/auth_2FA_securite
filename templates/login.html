@@ -1,1 +1,24 @@
-{% extends 'base.html' %}{% block title %}Connexion{% endblock %}{% block content %}<section class="auth-shell"><div class="auth-card"><div class="logo">🏥</div><h1>Hôpital Saint-Joseph</h1><p class="text-muted">Connexion au système sécurisé</p><form method="post" class="needs-validation" novalidate><label class="form-label">👤 Nom d'utilisateur</label><input name="user_id" class="form-control form-control-lg" required autofocus placeholder="u001"><label class="form-label mt-3">🔒 Mot de passe</label><input type="password" name="password" class="form-control form-control-lg" required placeholder="mot de passe (par défaut: user_id)"><button class="btn btn-hospital btn-lg w-100 mt-4">🔑 Se connecter</button></form><p class="small text-muted mt-4">Sécurisé par bcrypt, TOTP et contrôle RBAC/ABAC.</p></div></section>{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<section class="login-page">
+  <div class="simple-card login-card">
+    <h1>Connexion</h1>
+    <p class="text-muted">Accès au système de contrôle hospitalier.</p>
+
+    <form method="post" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="user_id" class="form-label">Nom d'utilisateur</label>
+        <input id="user_id" name="user_id" class="form-control" required autofocus placeholder="u001">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input id="password" type="password" name="password" class="form-control" required placeholder="Par défaut : user_id">
+      </div>
+      <button class="btn btn-primary w-100">Se connecter</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

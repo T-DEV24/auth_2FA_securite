@@ -1,1 +1,132 @@
-:root{--hospital:#0f766e;--hospital-dark:#115e59;--bg:#f3faf9;--text:#123;--muted:#64748b}body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}.hospital-nav{background:linear-gradient(135deg,var(--hospital),var(--hospital-dark));box-shadow:0 8px 24px #0f766e33}main{flex:1}.footer{background:#fff;border-top:1px solid #d9eeeb}.auth-shell{min-height:72vh;display:grid;place-items:center}.auth-card{width:min(440px,100%);background:#fff;border-radius:28px;padding:2rem;box-shadow:0 20px 60px #0f766e26;text-align:center}.logo{font-size:4rem}.btn-hospital{background:var(--hospital);border-color:var(--hospital);color:#fff}.btn-hospital:hover{background:var(--hospital-dark);border-color:var(--hospital-dark);color:#fff}.hero-card,.card,.stat-card{background:#fff;border:0;border-radius:22px;box-shadow:0 12px 30px #0f766e17}.hero-card{padding:2rem;background:linear-gradient(135deg,#fff,#d9fffb)}.stat-card{padding:1.3rem;display:flex;justify-content:space-between;align-items:center}.stat-card strong{font-size:2rem;color:var(--hospital)}.stat-card.danger strong{color:#dc2626}.page-title{margin-bottom:1rem}.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin-bottom:1rem}.badge{border-radius:999px}.sensitivity-public{background:#dcfce7;color:#166534}.sensitivity-interne{background:#dbeafe;color:#1e40af}.sensitivity-sensible,.sensitivity-confidentiel{background:#fee2e2;color:#991b1b}.access-dot{display:inline-block;width:14px;height:14px;border-radius:50%}.access-dot.green{background:#22c55e}.access-dot.red{background:#ef4444}.timeline{list-style:none;padding:0}.timeline li{border-left:3px solid var(--hospital);padding:.5rem 0 .5rem 1rem;margin:.5rem 0}.timeline span{display:block;color:var(--muted);font-size:.85rem}.timeline .ok{color:#16a34a}.timeline .ko{color:#dc2626}.otp-input{text-align:center;font-size:2rem;letter-spacing:.6rem;font-weight:700}.otp-timer{width:76px;height:76px;border-radius:50%;border:7px solid #99f6e4;display:grid;place-items:center;margin:1rem auto;color:var(--hospital);font-weight:800}.security-box{background:#f8fafc;border-left:4px solid var(--hospital);padding:1rem;border-radius:12px}@media (max-width:900px){.filters{grid-template-columns:1fr}.hero-card{padding:1.2rem}.table{font-size:.9rem}}
+:root {
+  --primary: #0f766e;
+  --primary-dark: #115e59;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --background: #f8fafc;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--text);
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.navbar-brand {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--primary);
+  --bs-btn-border-color: var(--primary);
+  --bs-btn-hover-bg: var(--primary-dark);
+  --bs-btn-hover-border-color: var(--primary-dark);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--primary);
+  --bs-btn-border-color: var(--primary);
+  --bs-btn-hover-bg: var(--primary);
+  --bs-btn-hover-border-color: var(--primary);
+}
+
+.simple-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.login-page {
+  min-height: 65vh;
+  display: grid;
+  place-items: center;
+}
+
+.login-card {
+  width: min(420px, 100%);
+}
+
+.page-heading {
+  margin-bottom: 1.25rem;
+}
+
+.stat-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-card span {
+  color: var(--muted);
+}
+
+.stat-card strong {
+  color: var(--primary-dark);
+  font-size: 1.6rem;
+}
+
+.table-card {
+  padding: 0.75rem;
+}
+
+.badge {
+  font-weight: 500;
+}
+
+.sensitivity-public {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.sensitivity-interne {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.sensitivity-sensible,
+.sensitivity-confidentiel {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.otp-input {
+  text-align: center;
+  letter-spacing: 0.35rem;
+  font-size: 1.4rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(15, 118, 110, 0.12);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.45rem;
+  }
+
+  .simple-card {
+    padding: 1rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+}

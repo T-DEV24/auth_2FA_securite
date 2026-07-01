@@ -1,1 +1,98 @@
-document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.needs-validation').forEach(f=>f.addEventListener('submit',e=>{if(!f.checkValidity()){e.preventDefault();e.stopPropagation()}f.classList.add('was-validated')}));const otp=document.getElementById('otpInput');if(otp){otp.addEventListener('input',()=>{otp.value=otp.value.replace(/\D/g,'').slice(0,6);if(otp.value.length===6)document.getElementById('otpForm').requestSubmit()});let n=30;setInterval(()=>{n=n<=1?30:n-1;const c=document.getElementById('otpCountdown');if(c)c.textContent=n},1000)}document.querySelectorAll('[data-resend]').forEach(b=>b.addEventListener('click',()=>alert('Code renvoyé (simulation).')));document.querySelectorAll('[data-filter]').forEach(input=>input.addEventListener('input',()=>filterTable(input.dataset.filter,input.value)));document.querySelectorAll('[data-column-filter]').forEach(sel=>sel.addEventListener('change',()=>filterTable(sel.closest('.filters').querySelector('[data-filter]')?.dataset.filter||'resourceTable')));function filterTable(id,q=''){const table=document.getElementById(id);if(!table)return;const filters=[...document.querySelectorAll('[data-column-filter]')];[...table.tBodies[0].rows].forEach(row=>{const text=row.innerText.toLowerCase();let show=text.includes((q||document.querySelector(`[data-filter="${id}"]`)?.value||'').toLowerCase());filters.forEach(sel=>{if(sel.value&&row.cells[Number(sel.dataset.columnFilter)]?.innerText.trim()!==sel.value)show=false});row.style.display=show?'':'none'})}function chart(id,type,label){const el=document.getElementById(id);if(!el||!window.Chart)return;new Chart(el,{type,data:{labels:JSON.parse(el.dataset.labels||'[]'),datasets:[{label,data:JSON.parse(el.dataset.values||'[]'),backgroundColor:['#0f766e','#14b8a6','#f97316','#ef4444','#6366f1','#84cc16']}]},options:{responsive:true,plugins:{legend:{display:type==='pie'}}}})}chart('typeChart','bar','Accès');chart('denyChart','bar','Refus');document.querySelectorAll('[data-counter]').forEach(el=>{const target=Number(el.dataset.counter);let cur=0;const t=setInterval(()=>{cur+=Math.max(1,Math.ceil(target/20));el.textContent=Math.min(cur,target);if(cur>=target)clearInterval(t)},25)})});
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.needs-validation').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    });
+  });
+
+  const otpInput = document.getElementById('otpInput');
+  if (otpInput) {
+    otpInput.addEventListener('input', () => {
+      otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 6);
+      if (otpInput.value.length === 6) {
+        document.getElementById('otpForm').requestSubmit();
+      }
+    });
+
+    let seconds = 30;
+    setInterval(() => {
+      seconds = seconds <= 1 ? 30 : seconds - 1;
+      const countdown = document.getElementById('otpCountdown');
+      if (countdown) countdown.textContent = seconds;
+    }, 1000);
+  }
+
+  document.querySelectorAll('[data-resend]').forEach((button) => {
+    button.addEventListener('click', () => alert('Code renvoyé.'));
+  });
+
+  document.querySelectorAll('[data-filter]').forEach((input) => {
+    input.addEventListener('input', () => filterTable(input.dataset.filter));
+  });
+
+  document.querySelectorAll('[data-column-filter]').forEach((select) => {
+    select.addEventListener('change', () => filterTable('resourceTable'));
+  });
+
+  renderChart('typeChart', 'bar', 'Accès');
+  renderChart('denyChart', 'bar', 'Refus');
+  animateCounters();
+});
+
+function filterTable(tableId) {
+  const table = document.getElementById(tableId);
+  if (!table || !table.tBodies.length) return;
+
+  const query = (document.querySelector(`[data-filter="${tableId}"]`)?.value || '').toLowerCase();
+  const columnFilters = Array.from(document.querySelectorAll('[data-column-filter]'));
+
+  Array.from(table.tBodies[0].rows).forEach((row) => {
+    let visible = row.innerText.toLowerCase().includes(query);
+    columnFilters.forEach((select) => {
+      const value = select.value;
+      const cell = row.cells[Number(select.dataset.columnFilter)];
+      if (value && cell?.innerText.trim() !== value) visible = false;
+    });
+    row.style.display = visible ? '' : 'none';
+  });
+}
+
+function renderChart(elementId, type, label) {
+  const element = document.getElementById(elementId);
+  if (!element || !window.Chart) return;
+
+  new Chart(element, {
+    type,
+    data: {
+      labels: JSON.parse(element.dataset.labels || '[]'),
+      datasets: [{
+        label,
+        data: JSON.parse(element.dataset.values || '[]'),
+        backgroundColor: ['#0f766e', '#94a3b8', '#cbd5e1', '#64748b', '#334155'],
+      }],
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+    },
+  });
+}
+
+function animateCounters() {
+  document.querySelectorAll('[data-counter]').forEach((element) => {
+    const target = Number(element.dataset.counter);
+    if (!Number.isFinite(target) || target <= 0) return;
+
+    let current = 0;
+    const step = Math.max(1, Math.ceil(target / 20));
+    const timer = setInterval(() => {
+      current += step;
+      element.textContent = Math.min(current, target);
+      if (current >= target) clearInterval(timer);
+    }, 25);
+  });
+}
