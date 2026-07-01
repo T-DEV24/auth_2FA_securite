@@ -1,0 +1,6 @@
+flask>=3.0
+pymongo>=4.7
+pyotp>=2.9
+PyJWT>=2.8
+bcrypt>=4.1
+pandas>=2.2
