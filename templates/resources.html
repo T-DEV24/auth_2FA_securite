@@ -54,7 +54,7 @@
             <td>{{ r.type }}</td>
             <td>{{ r.owner_department }}</td>
             <td><span class="badge sensitivity-{{ r.sensitivity }}">{{ r.sensitivity }}</span></td>
-            <td>{{ 'MFA requis' if r.sensitivity in ['sensible', 'confidentiel'] else 'Standard' }}</td>
+            <td>{{ r.access_status }}</td>
             <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('resource_detail', resource_id=r.resource_id) }}">Voir</a></td>
           </tr>
         {% endfor %}

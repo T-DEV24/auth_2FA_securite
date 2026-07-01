@@ -18,17 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    let seconds = 30;
+    let seconds = 180;
     setInterval(() => {
-      seconds = seconds <= 1 ? 30 : seconds - 1;
+      seconds = seconds <= 1 ? 180 : seconds - 1;
       const countdown = document.getElementById('otpCountdown');
       if (countdown) countdown.textContent = seconds;
     }, 1000);
   }
 
-  document.querySelectorAll('[data-resend]').forEach((button) => {
-    button.addEventListener('click', () => alert('Code renvoyé.'));
-  });
 
   document.querySelectorAll('[data-filter]').forEach((input) => {
     input.addEventListener('input', () => filterTable(input.dataset.filter));
