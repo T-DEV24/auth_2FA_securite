@@ -1,3 +1,10 @@
+from dotenv import load_dotenv
+
+from auth.mailer import send_otp_email
+
+load_dotenv()
+
+
 """Application Flask web + API pour le TP MFA/RBAC/ABAC hospitalier."""
 import csv
 import os
@@ -107,10 +114,9 @@ def _prepare_mfa_challenge(user):
     secret = user.get("totp_secret") or pyotp.random_base32()
     session["pending_totp_secret"] = secret
     code = get_current_totp(secret)
-    print(
-        f"[MFA] Code OTP pour {user['user_id']} : {code} "
-        f"(expire dans {TOTP_INTERVAL_SECONDS // 60} minutes)"
-    )
+    minutes = TOTP_INTERVAL_SECONDS // 60
+    if not send_otp_email(user["user_id"], code, minutes):
+        print(f"[MFA] Code OTP pour {user['user_id']} : {code} (expire dans {minutes} minutes)")
 
 
 def _resource_access_preview(user, resource):
