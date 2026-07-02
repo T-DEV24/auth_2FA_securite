@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
+load_dotenv()
 
 from auth.mailer import send_otp_email
-
-load_dotenv()
 
 
 """Application Flask web + API pour le TP MFA/RBAC/ABAC hospitalier."""
